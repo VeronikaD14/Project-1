@@ -3,9 +3,6 @@ const fs = require('fs');
 
 exports.selectCategory=()=>{
     
-   
-       // return Promise.reject({ status: 400, msg: "Invalid sort query"})
-    
 
     return connection.query(`SELECT * FROM categories;`)
     .then((result)=>{
