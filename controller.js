@@ -1,4 +1,4 @@
-const {selectCategory, selectSort, getFile}=require("./model")
+const {selectCategory, selectSort, getFile, sortReview}=require("./model")
 
 exports.getCategory=(req,res,next)=>{
     
@@ -33,3 +33,17 @@ exports.getReview =(req,res,next)=>{
         next(res.status(400).send({msg: 'Invalid ID'}))
     })
 }
+
+exports.getAllReview = (req,res,next)=>{
+    const {sort_by} = req.query
+    console.log('sortby', sort_by)
+  
+    sortReview(sort_by)
+    .then((reviews)=>{
+        res.status(200).send({reviews:reviews})
+    })
+    .catch((err)=>{
+        next(err)
+    })
+  }
+  

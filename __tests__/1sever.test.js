@@ -4,6 +4,7 @@ const testData = require('../db/data/test-data/index')
 const seed = require('../db/seeds/seed')
 const db = require('../db/connection')
 const expectedData = require('../endpoints.json');
+const toBeSortedBy = require('jest-sorted')
 
 
 
@@ -60,7 +61,7 @@ describe("GET /api/reviews/3", ()=>{
               expect(typeof reviews.category).toBe('string');
               expect(typeof reviews.created_at).toBe('string');
               expect(typeof reviews.votes).toBe('number');
-             // expect(typeof reviews.comment_count).toBe('number');
+            
 
           })
       })
@@ -83,6 +84,38 @@ it("should return Error msg if input ID is not a number",()=>{
       })
   })
 
+  describe("GET /api/reviews", ()=>{
+    it("should return an array of reviews objects with correct properties",()=>{
+        return request(app).get('/api/reviews').expect(200).then((response)=>{
+            response.body.reviews.forEach((reviews)=>{
+                expect(typeof reviews.title).toBe('string');
+                expect(typeof reviews.designer).toBe('string'); 
+                expect(typeof reviews.owner).toBe('string'); 
+                expect(typeof reviews.review_img_url).toBe('string'); 
+                expect(typeof reviews.category).toBe('string');
+                expect(typeof reviews.created_at).toBe('string');
+                expect(typeof reviews.votes).toBe('number');
+               expect(typeof reviews.comment_count).toBe('string');
+  
+            })
+        })
+    })
+  })
+  
+  
+  describe("GET /api/reviews queries ", ()=>{
+    it("should return a array of valid reviews objects SORTED by title",()=>{
+        return request(app).get('/api/reviews').expect(200).then((response)=>{
+      
+          console.log(response.body.reviews)
+
+                expect(response.body.reviews).toBeSorted({ descending: true, key: 'created_at' });
+               
+               
+            
+        })
+    })
+  })
 
 
 
