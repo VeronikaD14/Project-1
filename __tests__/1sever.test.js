@@ -3,6 +3,8 @@ const app = require('../app');
 const testData = require('../db/data/test-data/index')
 const seed = require('../db/seeds/seed')
 const db = require('../db/connection')
+const expectedData = require('../endpoints.json');
+
 
 
 beforeEach(() => {return seed(testData)});
@@ -30,7 +32,6 @@ describe('GET /api/categories', () => {
 describe('3.5 GET /api', () => {
   it('should return an json objects', () => {
 
-    const expectedData = require('../endpoints.json');
 
     return request(app)
      .get('/api')
@@ -73,9 +74,9 @@ describe("GET /api/reviews/3", ()=>{
         })
     })
 })
+
 it("should return Error msg if input ID is not a number",()=>{
   return request(app).get('/api/reviews/r').expect(400).then((response)=>{
-    console.log(response.body)
     expect(response.body.msg).toBe('Invalid ID');
       
 
@@ -85,6 +86,6 @@ it("should return Error msg if input ID is not a number",()=>{
 
 
 
-})
+}) 
 
 

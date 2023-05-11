@@ -26,27 +26,16 @@ exports.getFile = () => {
 
 
 
-exports.selectSort=(sort_by = "owner",order='asc', category= "hidden-roles")=>{
-    const validSortQueries = [ "title",
-    "designer",
-    "owner",
-    "review_img_url",
-    "category",
-    "created_at",
-    "votes",
-    "comment_count"];
-    const validOrder=["asc","desc"]
+exports.selectSort=(review_id)=>{
 
-    
-    if(!validSortQueries.includes(sort_by)){
-        return Promise.reject({ status: 400, msg: "Invalid sort query"})
+ 
+    const regex = /^\d+$/; 
+  
+    if (!regex.test(review_id)) { 
+      return Promise.reject({ status: 400, msg: 'Invalid ID' });
     }
 
-    if(!validOrder.includes(order)){
-        return Promise.reject({ status: 400, msg: "Invalid order query"})
-    }
-
-    return connection.query(`SELECT * FROM reviews ORDER BY ${sort_by} ${order};`)
+    return connection.query(`SELECT * FROM reviews Where review_id = ${review_id};`)
     .then((result)=>{
         return result.rows;
     })

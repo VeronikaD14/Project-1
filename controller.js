@@ -22,13 +22,14 @@ exports.getJson = (req, res, next) => {
   };
   
 exports.getReview =(req,res,next)=>{
-    const {sort_by} = req.query
+    const {review_id} = req.params
 
-    selectSort(sort_by)
-    .then((reviews)=>{
-        res.status(200).send({reviews:reviews})
+    selectSort(review_id)
+    .then((review)=>{
+        res.status(200).send({review:review})
     })
+    
     .catch((err)=>{
-        next(err)
+        next(res.status(400).send({msg: 'Invalid ID'}))
     })
 }
