@@ -30,41 +30,7 @@ describe('GET /api/categories', () => {
 describe('3.5 GET /api', () => {
   it('should return an json objects', () => {
 
-   const expectedData = {
-    "GET /api": {
-      "description": "serves up a json representation of all the available endpoints of the api"
-    },
-    "GET /api/categories": {
-      "description": "serves an array of all categories",
-      "queries": [],
-      "exampleResponse": {
-        "categories": [
-          {
-            "description": "Players attempt to uncover each other's hidden role",
-            "slug": "Social deduction"
-          }
-        ]
-      }
-    },
-    "GET /api/reviews": {
-      "description": "serves an array of all reviews",
-      "queries": ["category", "sort_by", "order"],
-      "exampleResponse": {
-        "reviews": [
-          {
-            "title": "One Night Ultimate Werewolf",
-            "designer": "Akihisa Okui",
-            "owner": "happyamy2016",
-            "review_img_url": "https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-            "category": "hidden-roles",
-            "created_at": "2018-05-30T15:59:13.341Z",
-            "votes": 0,
-            "comment_count": 6
-          }
-        ]
-      }
-    }
-  }
+    const expectedData = require('../endpoints.json');
 
     return request(app)
      .get('/api')
@@ -79,10 +45,13 @@ describe('3.5 GET /api', () => {
 
 
 
-describe("GET /api/reviews", ()=>{
-  it("should return an array of reviews objects with correct properties",()=>{
-      return request(app).get('/api/reviews').expect(200).then((response)=>{
-          response.body.reviews.forEach((reviews)=>{
+describe("GET /api/reviews/3", ()=>{
+  it("should return an review object from given ID with correct properties",()=>{
+      return request(app).get('/api/reviews/3').expect(200).then((response)=>{
+          response.body.review.forEach((reviews)=>{
+            
+            expect(reviews.review_id).toBe(3);
+
               expect(typeof reviews.title).toBe('string');
               expect(typeof reviews.designer).toBe('string'); 
               expect(typeof reviews.owner).toBe('string'); 
@@ -95,6 +64,27 @@ describe("GET /api/reviews", ()=>{
           })
       })
   })
+  it("should return an review object from given ID with correct properties",()=>{
+    return request(app).get('/api/reviews/4').expect(200).then((response)=>{
+        response.body.review.forEach((reviews)=>{
+          
+          expect(reviews.review_id).toBe(4);
+
+        })
+    })
+})
+it("should return Error msg if input ID is not a number",()=>{
+  return request(app).get('/api/reviews/r').expect(400).then((response)=>{
+    console.log(response.body)
+    expect(response.body.msg).toBe('Invalid ID');
+      
+
+      })
+  })
+
+
+
+
 })
 
 
