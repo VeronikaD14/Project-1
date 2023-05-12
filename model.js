@@ -25,21 +25,26 @@ exports.getFile = () => {
 };
 
 
-
-exports.selectSort=(review_id)=>{
-
- 
-    const regex = /^\d+$/; 
+exports.getId = (review_id) => {
   
-    if (!regex.test(review_id)) { 
-      return Promise.reject({ status: 400, msg: 'Invalid ID' });
-    }
+    if (!review_id > 100) { 
+      
+   
 
-    return connection.query(`SELECT * FROM reviews Where review_id = ${review_id};`)
-    .then((result)=>{
-        return result.rows;
+  const query = {
+    text: 'SELECT * FROM reviews WHERE review_id = $1',
+    values: [review_id],
+  };
+  return connection.query(query)
+    .then((result) => {
+      return result.rows;
     })
 }
+else {
+  return Promise.reject({ status: 404, msg: 'Not Found' });
+}
+}
+
 
 
 exports.sortReview = () => {
