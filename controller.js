@@ -1,4 +1,4 @@
-const {selectCategory, selectSort, getFile}=require("./model")
+const {selectCategory, getId, getFile, sortReview}=require("./model")
 
 exports.getCategory=(req,res,next)=>{
     
@@ -24,12 +24,24 @@ exports.getJson = (req, res, next) => {
 exports.getReview =(req,res,next)=>{
     const {review_id} = req.params
 
-    selectSort(review_id)
+    getId(review_id) 
     .then((review)=>{
         res.status(200).send({review:review})
     })
     
     .catch((err)=>{
-        next(res.status(400).send({msg: 'Invalid ID'}))
+        next(err)
     })
 }
+
+exports.getAllReview = (req,res,next)=>{
+  
+    sortReview()
+    .then((reviews)=>{
+        res.status(200).send({reviews:reviews})
+    })
+    .catch((err)=>{
+        next(err)
+    })
+  }
+  
