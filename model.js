@@ -1,4 +1,4 @@
-const connection = require('/home/veronika/northcoders/backend/be-nc-games/db/connection.js');
+const connection = require('./db/connection');
 const fs = require('fs');
 
 exports.selectCategory=()=>{
