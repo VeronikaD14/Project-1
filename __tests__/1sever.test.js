@@ -76,7 +76,7 @@ it("should return Error msg if input ID is not a number",()=>{
       })
   })
 
-  it.only("should return Error msg if input ID is not Found",()=>{
+  it("should return Error msg if input ID is not Found",()=>{
     return request(app).get('/api/reviews/100000').expect(404).then((response)=>{
       expect(response.body.msg).toBe('Not Found');
         

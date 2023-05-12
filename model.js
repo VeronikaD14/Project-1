@@ -26,11 +26,14 @@ exports.getFile = () => {
 
 
 exports.getId = (review_id) => {
-  
-    if (!review_id > 100) { 
-      
-   
 
+const regex = /^\d+$/;
+
+if (!regex.test(review_id)) {
+  return Promise.reject({ status: 400, msg: 'Invalid ID' });
+} else if (review_id > 100) {
+  return Promise.reject({ status: 404, msg: 'Not Found' });
+} else {
   const query = {
     text: 'SELECT * FROM reviews WHERE review_id = $1',
     values: [review_id],
@@ -38,10 +41,7 @@ exports.getId = (review_id) => {
   return connection.query(query)
     .then((result) => {
       return result.rows;
-    })
-}
-else {
-  return Promise.reject({ status: 404, msg: 'Not Found' });
+    });
 }
 }
 
