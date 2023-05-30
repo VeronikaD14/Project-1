@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const {getCategory, getReview, getJson, getAllReview}=require('./controller')
+const cors = require('cors')
 
+app.subscribe(cors())
 
 app.get('/api/categories', getCategory)
 
