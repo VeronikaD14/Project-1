@@ -1,4 +1,4 @@
-const {selectCategory, getId, getFile, sortReview, selectComment}=require("./model")
+const {selectCategory, getId, getFile, sortReview, selectComment, placeAComment, changeVotes }=require("./model")
 
 exports.getCategory=(req,res,next)=>{
     
@@ -57,3 +57,24 @@ exports.getAllReview = (req,res,next)=>{
         next(err)
     })
 }
+
+exports.postAComment = (request, response, next) => {
+    placeAComment(request.params, request.body)
+      .then((addedComment) => {
+        response.status(201).send({ addedComment });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  };
+  
+  exports.updateVotes = (request, response, next) => {
+    changeVotes(request.params, request.body)
+      .then((editedReview) => {
+        response.status(200).send({editedReview});
+      })
+      .catch((err) => {
+        next(err);
+      });
+   
+  };

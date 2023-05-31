@@ -72,3 +72,58 @@ exports.selectComment = (review_id) => {
       return result.rows;
     });
 }
+
+exports.placeAComment = ({ review_id }, { username, body }) => {
+  if (!username || !body) {
+    return Promise.reject({
+      status: 400,
+      msg: "Required fields not been completed",
+    });
+  }
+
+  const regexNum = /^[0-9]+$/;
+  if (!regexNum.test(review_id)) {
+    return Promise.reject({ status: 400, msg: "Invalid review ID provided" });
+  }
+  return connection
+    .query(
+      `INSERT INTO comments ( body, review_id,author)VALUES ( $1, $2 , $3 ) returning *;`,
+      [body, review_id, username]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    })
+    .catch((err) => {
+      if (err.constraint === "comments_author_fkey") {
+        return Promise.reject({
+          status: 400,
+          msg: "Supplied username is not registerd",
+        });
+      }
+      return err;
+    });
+};
+
+exports.changeVotes = ({ review_id }, { inc_votes }) => {
+  const regexNum = /^[0-9]+$/;
+  const regexVote = /^-[0-9]+|^[0-9]+/;
+  if (!regexNum.test(review_id)) {
+    return Promise.reject({ status: 400, msg: "Invalid review ID provided" });
+  }
+  if (!regexVote.test(inc_votes)) {
+    return Promise.reject({ status: 400, msg: "Invalid vote data provided" });
+  }
+
+  return connection
+    .query(
+      `UPDATE reviews
+  SET votes = votes + $2
+  WHERE review_id = $1 returning *`,
+      [review_id, inc_votes]
+    )
+    .then((newReview) => {
+    return newReview.rows
+    }).catch((err)=>{
+      return err
+    })
+};
