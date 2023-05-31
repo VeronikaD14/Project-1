@@ -1,4 +1,4 @@
-const {selectCategory, getId, getFile, sortReview}=require("./model")
+const {selectCategory, getId, getFile, sortReview, selectComment}=require("./model")
 
 exports.getCategory=(req,res,next)=>{
     
@@ -44,4 +44,16 @@ exports.getAllReview = (req,res,next)=>{
         next(err)
     })
   }
-  
+
+  exports.getComments =(req,res,next)=>{
+    const {review_id} = req.params
+
+    selectComment(review_id) 
+    .then((review)=>{
+        res.status(200).send({review:review})
+    })
+    
+    .catch((err)=>{
+        next(err)
+    })
+}

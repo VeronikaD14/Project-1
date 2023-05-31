@@ -60,3 +60,15 @@ exports.sortReview = () => {
     return result.rows;
   });
 };
+
+exports.selectComment = (review_id) => {
+
+  const query = {
+    text: 'SELECT * FROM comments WHERE review_id = $1',
+    values: [review_id],
+  };
+  return connection.query(query)
+    .then((result) => {
+      return result.rows;
+    });
+}
